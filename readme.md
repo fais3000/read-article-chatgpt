@@ -1,6 +1,11 @@
 # Read Article in ChatGPT Chrome Extension
 
-Right‑click any link → ChatGPT opens in a new tab with  
+Right‑click any ## Troubleshooting
+
+* **Prompt not inserted** – ensure you stayed logged in to ChatGPT and the site's layout has not changed.  
+  If you have issues, check the browser's developer console for any error messages.
+  Increase the retry delay in `content.js` if your connection is slow.
+* **Menu item missing** – reload the extension from the Extensions page.→ ChatGPT opens in a new tab with  
 `Read out this article to me <URL>` already typed in the chat box.
 
 ---
@@ -52,9 +57,8 @@ Right‑click any link → ChatGPT opens in a new tab with
 ## Customisation
 
 * **Prompt text** – edit the `prompt` constant in `background.js`.
-* **Auto‑submit** – after setting `box.value`, call  
-  `document.querySelector('[data-testid="send-button"]').click()`  
-  once the button exists.
+* **Auto‑submit** – uncomment the line `// document.querySelector('[data-testid="send-button"]')?.click();`  
+  in `content.js` to automatically send the prompt.
 
 ---
 

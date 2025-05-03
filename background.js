@@ -15,11 +15,23 @@ chrome.contextMenus.onClicked.addListener((info) => {
 
   /* Open ChatGPT and stash the prompt in the page */
   chrome.tabs.create({ url: "https://chat.openai.com/" }, (tab) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      world: "MAIN",
-      func: (text) => { window.__CHATGPT_PROMPT = text; },
-      args: [prompt]
+    // Wait for the page to load before injecting the script
+    chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo, updatedTab) {
+      if (tabId === tab.id && changeInfo.status === 'complete') {
+        // Remove the listener to avoid multiple executions
+        chrome.tabs.onUpdated.removeListener(listener);
+        
+        // Now inject the script
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          world: "MAIN",
+          func: (text) => { 
+            console.log('Setting prompt:', text);
+            window.__CHATGPT_PROMPT = text; 
+          },
+          args: [prompt]
+        });
+      }
     });
   });
 });
